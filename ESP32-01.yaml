@@ -1,0 +1,62 @@
+# This configuration is for the ESP32 that's polling the BLE Xiaomi temp sensors and throws them into Home Assistant
+    substitutions:
+      esphome_name: esp32temp01
+    esphome:
+      name: esp32temp01
+      platform: ESP32
+      board: mhetesp32devkit
+    wifi:
+      ssid: hi
+      password: hi
+      domain: .cowan.co.nz #prob not needed
+    logger:
+      level: debug
+    api:
+      reboot_timeout: 60min
+      password: Fish1234
+    ota:
+      password: Fish1234
+    time:
+      - platform: homeassistant
+     
+    esp32_ble_tracker:
+
+    switch:
+      - platform: gpio
+        name: "${esphome_name}-Onboard-LED"
+        pin: 2
+        inverted: True
+
+      - platform: restart
+        name: ${esphome_name}-restart
+        id: restart_switch
+       
+    sensor:
+      - platform: uptime
+        name: "${esphome_name}_Uptime Sensor"
+       
+      - platform: wifi_signal
+        name: "${esphome_name} WiFi Signal"
+        update_interval: 60s
+
+      - platform: xiaomi_lywsd03mmc
+        mac_address: A4:C1:38:A5:FE:4F
+        bindkey: "696fff19be5a2732f7dea74f29533626"
+        temperature:
+          name: "Master Bedroom Temperature"
+        humidity:
+          name: "Master Bedroom Humidity"
+        battery_level:
+          name: "Master Bedroom Battery Level"
+
+      - platform: xiaomi_lywsd03mmc
+        mac_address: A4:C1:38:CA:3B:BB
+        bindkey: "110c91f0f6ef0aed20ed8babfab710c3"
+        temperature:
+          name: "Living Room Temperature"
+        humidity:
+          name: "Living Room Humidity"
+        battery_level:
+          name: "Living Room Battery Level"     
+
+
